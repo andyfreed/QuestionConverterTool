@@ -7,20 +7,17 @@ def validate_raw_csv(df):
     required_columns = [
         'Question',
         'answer choice A',
-        'answer choice B', 
+        'answer choice B',
         'answer choice C',
         'answer choice D',
-        'Correct Answer,'  # Note the comma in the actual CSV header
+        'Correct Answer'
     ]
 
-    # Clean column names by removing any trailing commas and whitespace
-    df.columns = df.columns.str.strip(',').str.strip()
-
-    # Updated required columns without trailing comma
-    clean_required = [col.strip(',').strip() for col in required_columns]
+    # Clean column names by removing any trailing whitespace
+    df.columns = df.columns.str.strip()
 
     # Check if all required columns exist
-    missing_cols = [col for col in clean_required if col not in df.columns]
+    missing_cols = [col for col in required_columns if col not in df.columns]
     if missing_cols:
         return False, f"Missing required columns: {', '.join(missing_cols)}"
 
@@ -33,7 +30,7 @@ def validate_raw_csv(df):
 def transform_csv(df):
     """Transform raw CSV to goal format"""
     # Clean column names
-    df.columns = df.columns.str.strip(',').str.strip()
+    df.columns = df.columns.str.strip()
 
     # Initialize empty lists for new data
     records = []
