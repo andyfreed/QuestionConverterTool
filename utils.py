@@ -3,7 +3,15 @@ import io
 import random
 
 def validate_raw_csv(df):
-    """Validate the raw CSV format"""
+    """
+    Validate the raw CSV format and structure
+    
+    Args:
+        df (pandas.DataFrame): Input dataframe to validate
+        
+    Returns:
+        tuple: (bool, str) indicating validation status and message
+    """
     # Clean up column names - strip whitespace and convert to lowercase
     df.columns = df.columns.str.strip()
 
@@ -23,24 +31,46 @@ def validate_raw_csv(df):
     if missing_cols:
         return False, f"Missing required columns: {', '.join(missing_cols)}"
 
-    # Check if there are any empty rows (excluding trailing commas)
-    if df[required_columns].isna().any().any():
-        return False, "CSV contains empty cells in required columns"
+    # Check if there are any empty rows
+    empty_cells = df[required_columns].isna().any(axis=1)
+    if empty_cells.any():
+        first_empty_row = empty_cells[empty_cells].index[0] + 1
+        return False, f"Empty cells found in required columns (first occurrence at row {first_empty_row})"
+
+    # Validate that correct answers match one of the choices
+    for idx, row in df.iterrows():
+        correct_answer = str(row['Correct Answer']).strip()
+        choices = [
+            str(row['answer choice A']).strip(),
+            str(row['answer choice B']).strip(),
+            str(row['answer choice C']).strip(),
+            str(row['answer choice D']).strip()
+        ]
+        if correct_answer not in choices:
+            return False, f"Correct answer doesn't match any choice in row {idx + 1}"
 
     return True, "Validation successful"
 
 def transform_csv(df):
-    """Transform raw CSV to goal format"""
+    """
+    Transform raw CSV to goal format
+    
+    Args:
+        df (pandas.DataFrame): Input dataframe to transform
+        
+    Returns:
+        pandas.DataFrame: Transformed dataframe in goal format
+    """
     # Clean column names
     df.columns = df.columns.str.strip()
 
     # Initialize empty lists for new data
     records = []
 
-    # Starting ID (can be randomized or sequential)
+    # Starting ID (random but consistent within batch)
     current_id = random.randint(100000, 999999)
 
-    for _, row in df.iterrows():
+    for idx, row in df.iterrows():
         # Skip empty rows
         if pd.isna(row['Question']):
             continue
@@ -55,19 +85,18 @@ def transform_csv(df):
 
         # Create new record in goal format
         record = {
-            'ID': current_id,
+            'ID': current_id + idx,
             'Title': row['Question'],
-            'Category': '366524 Exam Questions',  # Default category
+            'Category': '366524 Exam Questions',
             'Type': 'single-choice',
             'Post Content': row['Question'],
             'Status': 'publish',
-            'Menu Order': len(records) + 1,
+            'Menu Order': idx + 1,
             'Options': options,
             'Answer': str(row['Correct Answer']).strip()
         }
 
         records.append(record)
-        current_id += 1
 
     # Create new dataframe in goal format
     goal_df = pd.DataFrame(records)
@@ -75,9 +104,26 @@ def transform_csv(df):
     return goal_df
 
 def get_csv_preview(df, num_rows=5):
-    """Get a preview of the dataframe as HTML"""
+    """
+    Get a preview of the dataframe as HTML
+    
+    Args:
+        df (pandas.DataFrame): Dataframe to preview
+        num_rows (int): Number of rows to show in preview
+        
+    Returns:
+        str: HTML representation of the dataframe preview
+    """
     return df.head(num_rows).to_html(index=False)
 
 def convert_df_to_csv(df):
-    """Convert dataframe to CSV string"""
+    """
+    Convert dataframe to CSV string
+    
+    Args:
+        df (pandas.DataFrame): Dataframe to convert
+        
+    Returns:
+        str: CSV string representation of the dataframe
+    """
     return df.to_csv(index=False)
