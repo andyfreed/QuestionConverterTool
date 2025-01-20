@@ -1,14 +1,29 @@
 import pandas as pd
 import io
 import random
+import re
+
+def clean_question_text(text):
+    """
+    Remove question numbers from the beginning of the text
+
+    Args:
+        text (str): Input text that may start with a question number
+
+    Returns:
+        str: Cleaned text without leading question number
+    """
+    # Remove leading digits followed by dot and whitespace
+    cleaned_text = re.sub(r'^\d+\.\s*', '', str(text).strip())
+    return cleaned_text
 
 def validate_raw_csv(df):
     """
     Validate the raw CSV format and structure
-    
+
     Args:
         df (pandas.DataFrame): Input dataframe to validate
-        
+
     Returns:
         tuple: (bool, str) indicating validation status and message
     """
@@ -54,10 +69,10 @@ def validate_raw_csv(df):
 def transform_csv(df):
     """
     Transform raw CSV to goal format
-    
+
     Args:
         df (pandas.DataFrame): Input dataframe to transform
-        
+
     Returns:
         pandas.DataFrame: Transformed dataframe in goal format
     """
@@ -75,6 +90,9 @@ def transform_csv(df):
         if pd.isna(row['Question']):
             continue
 
+        # Clean the question text to remove leading numbers
+        cleaned_question = clean_question_text(row['Question'])
+
         # Combine all answer choices into pipe-separated string
         options = "|".join([
             str(row['answer choice A']).strip(),
@@ -86,10 +104,10 @@ def transform_csv(df):
         # Create new record in goal format
         record = {
             'ID': current_id + idx,
-            'Title': row['Question'],
+            'Title': cleaned_question,
             'Category': '366524 Exam Questions',
             'Type': 'single-choice',
-            'Post Content': row['Question'],
+            'Post Content': cleaned_question,
             'Status': 'publish',
             'Menu Order': idx + 1,
             'Options': options,
@@ -106,11 +124,11 @@ def transform_csv(df):
 def get_csv_preview(df, num_rows=5):
     """
     Get a preview of the dataframe as HTML
-    
+
     Args:
         df (pandas.DataFrame): Dataframe to preview
         num_rows (int): Number of rows to show in preview
-        
+
     Returns:
         str: HTML representation of the dataframe preview
     """
@@ -119,10 +137,10 @@ def get_csv_preview(df, num_rows=5):
 def convert_df_to_csv(df):
     """
     Convert dataframe to CSV string
-    
+
     Args:
         df (pandas.DataFrame): Dataframe to convert
-        
+
     Returns:
         str: CSV string representation of the dataframe
     """
