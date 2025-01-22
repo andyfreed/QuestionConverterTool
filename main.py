@@ -3,10 +3,11 @@ import pandas as pd
 from utils import validate_raw_csv, transform_csv, get_csv_preview, convert_df_to_csv
 import io
 import zipfile
+import base64
 
 def main():
     st.set_page_config(
-        page_title="CSV Format Converter",
+        page_title="Convert Exam to Import File",
         layout="wide",
         initial_sidebar_state="collapsed"
     )
@@ -42,6 +43,27 @@ def main():
             padding: 1.5rem;
         }
 
+        @keyframes slide {
+            from {
+                transform: translateX(-100%);
+            }
+            to {
+                transform: translateX(100vw);
+            }
+        }
+
+        .success-animation {
+            position: fixed;
+            bottom: 20px;
+            z-index: 1000;
+            animation: slide 5s linear;
+        }
+
+        .success-animation img {
+            height: 100px;
+            width: auto;
+        }
+
         #MainMenu, footer {
             display: none;
         }
@@ -49,8 +71,8 @@ def main():
     """, unsafe_allow_html=True)
 
     # Header
-    st.title("CSV Format Converter")
-    st.write("Convert raw questions CSV to structured goal format")
+    st.title("Convert Exam to Import File")
+    st.write("Transform exam questions into importable format")
 
     # Requirements section
     with st.container():
@@ -97,6 +119,9 @@ def main():
         accept_multiple_files=True,
         help="Upload one or more CSV files containing questions and answers in the raw format"
     )
+
+    # Success animation container
+    success_container = st.empty()
 
     if uploaded_files:
         st.info(f"📁 {len(uploaded_files)} file(s) uploaded")
@@ -160,6 +185,16 @@ def main():
                             st.error(f"{file['name']}: {file['message']}")
 
                     if successful_files:
+                        # Show success animation
+                        success_container.markdown(
+                            f"""
+                            <div class="success-animation">
+                                <img src="attached_assets/pepe-pepe-wink.gif" alt="Success!">
+                            </div>
+                            """,
+                            unsafe_allow_html=True
+                        )
+
                         # Prepare download
                         zip_buffer = io.BytesIO()
                         with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zf:
