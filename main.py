@@ -14,41 +14,50 @@ def main():
 
     st.markdown("""
         <style>
-        .uploadedFile {
-            border: 2px dashed #1f77b4;
-            border-radius: 4px;
-            padding: 20px;
-            margin: 0;
-            background-color: #f8f9fa;
-        }
+        /* Base styles */
         .stApp {
             background-color: transparent;
         }
-        .usage-info {
-            background-color: #f8f9fa;
-            padding: 15px;
-            border-radius: 4px;
-            margin-bottom: 10px;
-            color: #333333;
-        }
-        .usage-info h4 {
-            color: #1f77b4;
-            margin-top: 10px;
-            margin-bottom: 8px;
-        }
-        .usage-info ul {
-            margin-left: 20px;
-        }
+
+        /* Remove default Streamlit margins */
         .block-container {
             padding: 1rem !important;
         }
-        /* Minimal spacing controls */
-        div[data-testid="stExpander"] {
-            margin: 0 !important;
-            padding: 0 !important;
+
+        /* Custom content wrapper */
+        .content-wrapper {
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            padding: 1rem;
+            margin-bottom: 1rem;
         }
-        .streamlit-expanderContent {
-            padding: 0 !important;
+
+        /* Remove expander margins */
+        div[data-testid="stExpander"] {
+            margin-bottom: 0 !important;
+            border: none !important;
+        }
+
+        /* Target the category input container */
+        .stTextInput {
+            margin-top: 0 !important;
+        }
+
+        /* File uploader styling */
+        .uploadedFile {
+            border: 2px dashed #1f77b4;
+            border-radius: 4px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        /* Hide unnecessary elements */
+        div[data-testid="stToolbar"] {
+            display: none;
+        }
+
+        footer {
+            display: none;
         }
         </style>
     """, unsafe_allow_html=True)
@@ -56,10 +65,11 @@ def main():
     st.title("CSV Format Converter")
     st.write("Convert raw questions CSV to structured goal format")
 
+    # Wrap content in a custom container
+    st.markdown('<div class="content-wrapper">', unsafe_allow_html=True)
 
-    # Direct component placement without containers
+    # Format requirements
     st.markdown("""
-        <div class="usage-info">
         <h4>Required CSV Columns:</h4>
         <ul>
         <li>Question</li>
@@ -77,9 +87,10 @@ def main():
         <li>All fields should be filled out</li>
         <li>The correct answer must match one of the choices exactly</li>
         </ul>
-        </div>
     """, unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
 
+    # Category input (immediately after requirements)
     category = st.text_input(
         "Category",
         help="Enter the category to be used in the converted files",
@@ -92,6 +103,7 @@ def main():
         value=False
     )
 
+    # File uploader
     st.markdown('<div class="uploadedFile">', unsafe_allow_html=True)
     uploaded_files = st.file_uploader(
         "Upload raw questions CSV files",
@@ -104,22 +116,18 @@ def main():
     if uploaded_files:
         st.info(f"📁 {len(uploaded_files)} file(s) uploaded")
 
-        # Process files button with enhanced visibility
         if not category:
             st.error("⚠️ Please enter a category before processing files")
         elif st.button("🔄 Process All Files", help="Click to convert all uploaded files", use_container_width=True):
-            # Initialize progress tracking
             progress_bar = st.progress(0)
             status_text = st.empty()
 
             try:
-                # Process each file
                 processed_files = []
                 for idx, uploaded_file in enumerate(uploaded_files):
                     status_text.text(f"Processing file {idx + 1}/{len(uploaded_files)}: {uploaded_file.name}")
 
                     try:
-                        # Read and process the file
                         df = pd.read_csv(uploaded_file)
                         is_valid, message = validate_raw_csv(df)
 
@@ -147,32 +155,24 @@ def main():
                             'message': str(e)
                         })
 
-                    # Update progress
                     progress_bar.progress((idx + 1) / len(uploaded_files))
 
-                # Show processing results
                 st.subheader("Processing Results")
-
-                # Display results in columns
                 cols = st.columns(2)
 
-                # Success column
                 with cols[0]:
                     st.markdown("#### ✅ Successful Conversions")
                     successful_files = [f for f in processed_files if f['status'] == 'success']
                     for file in successful_files:
                         st.success(f"{file['name']}: {file['message']}")
 
-                # Error column
                 with cols[1]:
                     st.markdown("#### ❌ Failed Conversions")
                     failed_files = [f for f in processed_files if f['status'] == 'error']
                     for file in failed_files:
                         st.error(f"{file['name']}: {file['message']}")
 
-                # Prepare download if there are successful conversions
                 if successful_files:
-                    # Create a ZIP file containing all converted CSVs
                     zip_buffer = io.BytesIO()
                     with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zf:
                         for file in successful_files:
@@ -180,7 +180,6 @@ def main():
                             output_filename = f"converted_{file['name']}"
                             zf.writestr(output_filename, csv_data)
 
-                    # Offer ZIP download with enhanced visibility
                     st.download_button(
                         label="📥 Download All Converted Files (ZIP)",
                         data=zip_buffer.getvalue(),
@@ -190,7 +189,6 @@ def main():
                         use_container_width=True
                     )
 
-                    # Show conversion statistics
                     st.info(f"""
                     📊 Batch Processing Statistics:
                     - Total files processed: {len(processed_files)}
