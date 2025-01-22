@@ -43,8 +43,8 @@ def main():
             margin-top: 0 !important;
         }
 
-        /* File uploader styling */
-        .uploadedFile {
+        /* Style only the file uploader dropzone */
+        div[data-testid="stFileUploader"] div[data-testid="stFileUploadDropzone"] {
             border: 2px dashed #1f77b4;
             border-radius: 4px;
             padding: 1rem;
@@ -103,15 +103,13 @@ def main():
         value=False
     )
 
-    # File uploader
-    st.markdown('<div class="uploadedFile">', unsafe_allow_html=True)
+    # File uploader (without extra wrapper)
     uploaded_files = st.file_uploader(
         "Upload raw questions CSV files",
         type=['csv'],
         accept_multiple_files=True,
         help="Upload one or more CSV files containing questions and answers in the raw format"
     )
-    st.markdown('</div>', unsafe_allow_html=True)
 
     if uploaded_files:
         st.info(f"📁 {len(uploaded_files)} file(s) uploaded")
