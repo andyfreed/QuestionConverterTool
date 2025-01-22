@@ -19,7 +19,7 @@ def main():
             border: 2px dashed #1f77b4;
             border-radius: 4px;
             padding: 20px;
-            margin: 10px 0;
+            margin: 0;
             background-color: #f8f9fa;
         }
         .stApp {
@@ -29,7 +29,7 @@ def main():
             background-color: #f8f9fa;
             padding: 15px;
             border-radius: 4px;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
             color: #333333;
         }
         .usage-info h4 {
@@ -39,6 +39,14 @@ def main():
         }
         .usage-info ul {
             margin-left: 20px;
+        }
+        /* Remove extra spacing between components */
+        .stExpander {
+            margin-bottom: 0 !important;
+        }
+        .block-container {
+            padding-top: 2rem !important;
+            padding-bottom: 0 !important;
         }
         </style>
     """, unsafe_allow_html=True)
