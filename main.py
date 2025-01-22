@@ -76,6 +76,21 @@ def main():
         div[data-testid="stExpander"] + div {
             margin-top: -1em !important;
         }
+        /* Additional aggressive spacing fixes */
+        div[class*="stMarkdown"] {
+            margin-top: 0 !important;
+            margin-bottom: 0 !important;
+        }
+        .main > div {
+            padding: 0 !important;
+        }
+        div[data-testid="InputInstructions"] {
+            display: none;
+        }
+        /* Force compact layout */
+        .element-container:not(:last-child) {
+            margin-bottom: -1rem !important;
+        }
         </style>
     """, unsafe_allow_html=True)
 
