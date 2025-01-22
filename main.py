@@ -39,57 +39,34 @@ def main():
         .usage-info ul {
             margin-left: 20px;
         }
-        /* Aggressive spacing removal */
-        .stExpander, .element-container, div[data-testid="stExpander"], div[data-testid="stMarkdown"] {
-            margin: 0 !important;
-            padding: 0 !important;
-        }
+        /* Compact layout without overlapping */
         .block-container {
             padding-top: 2rem !important;
             padding-bottom: 0 !important;
         }
-        div[data-testid="stFileUploader"] {
-            margin-top: 0 !important;
-            padding-top: 0 !important;
-        }
-        /* Remove all gaps */
-        .css-1544g2n {
+        .element-container {
+            margin-top: 0.5rem !important;
+            margin-bottom: 0.5rem !important;
             padding: 0 !important;
+        }
+        div[data-testid="stExpander"] {
+            margin: 0 0 1rem 0 !important;
+            padding: 0 !important;
+        }
+        div[data-testid="stMarkdown"] {
             margin: 0 !important;
-        }
-        .css-1kyxreq {
-            margin-top: -1rem !important;
-        }
-        /* Hide default expander spacing */
-        .streamlit-expanderHeader {
-            margin: 0 !important;
-            padding: 0 !important;
-        }
-        /* Target Streamlit's internal structure */
-        div[data-testid="stVerticalBlock"] > div {
-            margin-top: -1em !important;
-            padding-top: 0 !important;
-        }
-        div[data-baseweb="input"] {
-            margin-top: 0 !important;
-        }
-        div[data-testid="stExpander"] + div {
-            margin-top: -1em !important;
-        }
-        /* Additional aggressive spacing fixes */
-        div[class*="stMarkdown"] {
-            margin-top: 0 !important;
-            margin-bottom: 0 !important;
-        }
-        .main > div {
-            padding: 0 !important;
         }
         div[data-testid="InputInstructions"] {
             display: none;
         }
-        /* Force compact layout */
-        .element-container:not(:last-child) {
-            margin-bottom: -1rem !important;
+        /* Ensure proper spacing for inputs */
+        div[data-baseweb="input"] {
+            margin: 0.5rem 0 !important;
+        }
+        /* Maintain compact file uploader */
+        div[data-testid="stFileUploader"] {
+            margin: 0.5rem 0 !important;
+            padding: 0 !important;
         }
         </style>
     """, unsafe_allow_html=True)
