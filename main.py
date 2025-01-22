@@ -8,8 +8,25 @@ def main():
     st.set_page_config(
         page_title="CSV Format Converter",
         layout="wide",
-        initial_sidebar_state="collapsed"
+        initial_sidebar_state="collapsed",
+        menu_items=None
     )
+
+    # Add custom CSS to make the file uploader more visible
+    st.markdown("""
+        <style>
+        .uploadedFile {
+            border: 2px dashed #1f77b4;
+            border-radius: 4px;
+            padding: 20px;
+            margin: 10px 0;
+            background-color: #f8f9fa;
+        }
+        .stApp {
+            background-color: transparent;
+        }
+        </style>
+    """, unsafe_allow_html=True)
 
     st.title("CSV Format Converter")
     st.write("Convert raw questions CSV to structured goal format")
@@ -26,19 +43,21 @@ def main():
         - Correct Answer
         """)
 
-    # File uploader with multiple files support
+    # File uploader with multiple files support and enhanced visibility
+    st.markdown('<div class="uploadedFile">', unsafe_allow_html=True)
     uploaded_files = st.file_uploader(
         "Upload raw questions CSV files",
         type=['csv'],
         accept_multiple_files=True,
         help="Upload one or more CSV files containing questions and answers in the raw format"
     )
+    st.markdown('</div>', unsafe_allow_html=True)
 
     if uploaded_files:
         st.info(f"📁 {len(uploaded_files)} file(s) uploaded")
 
-        # Process files button
-        if st.button("🔄 Process All Files", help="Click to convert all uploaded files"):
+        # Process files button with enhanced visibility
+        if st.button("🔄 Process All Files", help="Click to convert all uploaded files", use_container_width=True):
             # Initialize progress tracking
             progress_bar = st.progress(0)
             status_text = st.empty()
@@ -111,13 +130,14 @@ def main():
                             output_filename = f"converted_{file['name']}"
                             zf.writestr(output_filename, csv_data)
 
-                    # Offer ZIP download
+                    # Offer ZIP download with enhanced visibility
                     st.download_button(
                         label="📥 Download All Converted Files (ZIP)",
                         data=zip_buffer.getvalue(),
                         file_name="converted_files.zip",
                         mime="application/zip",
-                        help="Download a ZIP file containing all successfully converted files"
+                        help="Download a ZIP file containing all successfully converted files",
+                        use_container_width=True
                     )
 
                     # Show conversion statistics
