@@ -30,6 +30,15 @@ def main():
             padding: 15px;
             border-radius: 4px;
             margin-bottom: 20px;
+            color: #333333;
+        }
+        .usage-info h4 {
+            color: #1f77b4;
+            margin-top: 10px;
+            margin-bottom: 8px;
+        }
+        .usage-info ul {
+            margin-left: 20px;
         }
         </style>
     """, unsafe_allow_html=True)
@@ -42,20 +51,22 @@ def main():
         st.markdown("""
         <div class="usage-info">
         <h4>Required CSV Columns:</h4>
-
-        - Question
-        - answer choice A
-        - answer choice B
-        - answer choice C
-        - answer choice D
-        - Correct Answer
+        <ul>
+        <li>Question</li>
+        <li>answer choice A</li>
+        <li>answer choice B</li>
+        <li>answer choice C</li>
+        <li>answer choice D</li>
+        <li>Correct Answer</li>
+        </ul>
 
         <h4>Important Notes:</h4>
-
-        - Make sure your CSV file contains all required columns
-        - Column names should match exactly (case-sensitive)
-        - All fields should be filled out
-        - The correct answer must match one of the choices exactly
+        <ul>
+        <li>Make sure your CSV file contains all required columns</li>
+        <li>Column names should match exactly (case-sensitive)</li>
+        <li>All fields should be filled out</li>
+        <li>The correct answer must match one of the choices exactly</li>
+        </ul>
         </div>
         """, unsafe_allow_html=True)
 
