@@ -12,7 +12,6 @@ def main():
         menu_items=None
     )
 
-    # Add custom CSS to make the file uploader more visible
     st.markdown("""
         <style>
         .uploadedFile {
@@ -56,6 +55,15 @@ def main():
         div[data-testid="stFileUploader"] {
             margin-top: 0 !important;
             padding-top: 0 !important;
+        }
+        /* Fix spacing between sections */
+        section[data-testid="stExpander"] > div:last-child {
+            margin-bottom: 0 !important;
+            padding-bottom: 0 !important;
+        }
+        .element-container {
+            margin: 0 !important;
+            padding: 0 !important;
         }
         </style>
     """, unsafe_allow_html=True)
