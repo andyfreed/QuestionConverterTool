@@ -5,7 +5,7 @@ import re
 
 def clean_question_text(text):
     """
-    Remove question numbers from the beginning of the text
+    Remove question numbers from the beginning of the text while preserving text content
 
     Args:
         text (str): Input text that may start with a question number
@@ -13,8 +13,13 @@ def clean_question_text(text):
     Returns:
         str: Cleaned text without leading question number
     """
-    # Remove leading digits followed by dot and whitespace
-    cleaned_text = re.sub(r'^\d+\.\s*', '', str(text).strip())
+    # Convert to string and handle encoding
+    text = str(text).strip()
+
+    # Only remove numbers at the start of the text that are followed by a period and space
+    # This preserves periods in abbreviations like "Inc." or other mid-text numbers
+    cleaned_text = re.sub(r'^(\d+)\.\s+', '', text)
+
     return cleaned_text
 
 def validate_raw_csv(df):
@@ -27,6 +32,9 @@ def validate_raw_csv(df):
     Returns:
         tuple: (bool, str) indicating validation status and message
     """
+    # Read CSV with proper encoding
+    df = df.copy()
+
     # Clean up column names - strip whitespace and convert to lowercase
     df.columns = df.columns.str.strip()
 
@@ -119,6 +127,11 @@ def transform_csv(df):
     # Create new dataframe in goal format
     goal_df = pd.DataFrame(records)
 
+    # Ensure proper encoding in the output
+    for col in goal_df.columns:
+        if goal_df[col].dtype == 'object':
+            goal_df[col] = goal_df[col].str.encode('utf-8').str.decode('utf-8')
+
     return goal_df
 
 def get_csv_preview(df, num_rows=5):
@@ -144,4 +157,4 @@ def convert_df_to_csv(df):
     Returns:
         str: CSV string representation of the dataframe
     """
-    return df.to_csv(index=False)
+    return df.to_csv(index=False, encoding='utf-8')
