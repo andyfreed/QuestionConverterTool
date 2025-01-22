@@ -54,7 +54,8 @@ def main():
 
         .success-animation {
             position: fixed;
-            bottom: 20px;
+            top: 50%;
+            transform: translateY(-50%);
             z-index: 1000;
             animation: slide 5s linear;
         }
@@ -73,6 +74,10 @@ def main():
     # Header
     st.title("Convert Exam to Import File")
     st.write("Transform exam questions into importable format")
+
+    # Load and encode the Pepe GIF
+    with open("attached_assets/pepe-pepe-wink.gif", "rb") as f:
+        pepe_gif = base64.b64encode(f.read()).decode()
 
     # Requirements section
     with st.container():
@@ -189,7 +194,7 @@ def main():
                         success_container.markdown(
                             f"""
                             <div class="success-animation">
-                                <img src="attached_assets/pepe-pepe-wink.gif" alt="Success!">
+                                <img src="data:image/gif;base64,{pepe_gif}" alt="Success!">
                             </div>
                             """,
                             unsafe_allow_html=True
