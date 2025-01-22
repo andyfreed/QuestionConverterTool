@@ -65,6 +65,17 @@ def main():
             margin: 0 !important;
             padding: 0 !important;
         }
+        /* Target Streamlit's internal structure */
+        div[data-testid="stVerticalBlock"] > div {
+            margin-top: -1em !important;
+            padding-top: 0 !important;
+        }
+        div[data-baseweb="input"] {
+            margin-top: 0 !important;
+        }
+        div[data-testid="stExpander"] + div {
+            margin-top: -1em !important;
+        }
         </style>
     """, unsafe_allow_html=True)
 
