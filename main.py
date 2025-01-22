@@ -48,6 +48,15 @@ def main():
             padding-top: 2rem !important;
             padding-bottom: 0 !important;
         }
+        /* Additional spacing fixes */
+        div[data-testid="stExpander"] {
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+        div[data-testid="stFileUploader"] {
+            margin-top: 0 !important;
+            padding-top: 0 !important;
+        }
         </style>
     """, unsafe_allow_html=True)
 
