@@ -66,12 +66,14 @@ def validate_raw_csv(df):
 
     return True, "Validation successful"
 
-def transform_csv(df):
+def transform_csv(df, category, include_ids=True):
     """
     Transform raw CSV to goal format
 
     Args:
         df (pandas.DataFrame): Input dataframe to transform
+        category (str): Category value to use in the output
+        include_ids (bool): Whether to include ID values or leave them blank
 
     Returns:
         pandas.DataFrame: Transformed dataframe in goal format
@@ -83,7 +85,7 @@ def transform_csv(df):
     records = []
 
     # Starting ID (random but consistent within batch)
-    current_id = random.randint(100000, 999999)
+    current_id = random.randint(100000, 999999) if include_ids else None
 
     for idx, row in df.iterrows():
         # Skip empty rows
@@ -103,9 +105,9 @@ def transform_csv(df):
 
         # Create new record in goal format
         record = {
-            'ID': current_id + idx,
+            'ID': '' if not include_ids else (current_id + idx),
             'Title': cleaned_question,
-            'Category': '366524 Exam Questions',
+            'Category': category,
             'Type': 'single-choice',
             'Post Content': cleaned_question,
             'Status': 'publish',

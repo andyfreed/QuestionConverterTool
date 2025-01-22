@@ -87,6 +87,20 @@ def main():
         </div>
         """, unsafe_allow_html=True)
 
+    # Add category input field
+    category = st.text_input(
+        "Category",
+        help="Enter the category to be used in the converted files",
+        placeholder="Enter category (required)",
+    )
+
+    # Add checkbox for blank IDs
+    blank_ids = st.checkbox(
+        "Export with blank IDs",
+        help="Check this to export files with blank ID column values (header will be kept)",
+        value=False
+    )
+
     # File uploader with multiple files support and enhanced visibility
     st.markdown('<div class="uploadedFile">', unsafe_allow_html=True)
     uploaded_files = st.file_uploader(
@@ -101,7 +115,9 @@ def main():
         st.info(f"📁 {len(uploaded_files)} file(s) uploaded")
 
         # Process files button with enhanced visibility
-        if st.button("🔄 Process All Files", help="Click to convert all uploaded files", use_container_width=True):
+        if not category:
+            st.error("⚠️ Please enter a category before processing files")
+        elif st.button("🔄 Process All Files", help="Click to convert all uploaded files", use_container_width=True):
             # Initialize progress tracking
             progress_bar = st.progress(0)
             status_text = st.empty()
@@ -118,7 +134,7 @@ def main():
                         is_valid, message = validate_raw_csv(df)
 
                         if is_valid:
-                            converted_df = transform_csv(df)
+                            converted_df = transform_csv(df, category=category, include_ids=not blank_ids)
                             processed_files.append({
                                 'name': uploaded_file.name,
                                 'df': converted_df,
