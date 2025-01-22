@@ -39,34 +39,34 @@ def main():
         .usage-info ul {
             margin-left: 20px;
         }
-        /* Compact layout without overlapping */
+        /* Refined spacing control */
         .block-container {
-            padding-top: 2rem !important;
-            padding-bottom: 0 !important;
-        }
-        .element-container {
-            margin-top: 0.5rem !important;
-            margin-bottom: 0.5rem !important;
-            padding: 0 !important;
+            padding: 1rem 1rem 0 1rem !important;
         }
         div[data-testid="stExpander"] {
-            margin: 0 0 1rem 0 !important;
+            padding: 0 !important;
+            border: none !important;
+        }
+        div[data-testid="stExpander"] > div {
             padding: 0 !important;
         }
-        div[data-testid="stMarkdown"] {
-            margin: 0 !important;
-        }
-        div[data-testid="InputInstructions"] {
-            display: none;
-        }
-        /* Ensure proper spacing for inputs */
-        div[data-baseweb="input"] {
-            margin: 0.5rem 0 !important;
-        }
-        /* Maintain compact file uploader */
-        div[data-testid="stFileUploader"] {
-            margin: 0.5rem 0 !important;
+        div[data-testid="stForm"] {
             padding: 0 !important;
+        }
+        div[data-testid="column"] {
+            padding: 0 !important;
+        }
+        .stTextInput > div {
+            padding-top: 0.5rem !important;
+        }
+        .stCheckbox {
+            padding-top: 0.5rem !important;
+        }
+        section[data-testid="stSidebar"] {
+            padding-top: 0 !important;
+        }
+        div[data-testid="stVerticalBlock"] > div:first-child {
+            padding-top: 0 !important;
         }
         </style>
     """, unsafe_allow_html=True)
@@ -74,8 +74,9 @@ def main():
     st.title("CSV Format Converter")
     st.write("Convert raw questions CSV to structured goal format")
 
-    # Container to group related elements
-    with st.container():
+    # Container for better spacing control
+    form_container = st.container()
+    with form_container:
         # Format requirements expander
         with st.expander("ℹ️ Input Format Requirements", expanded=True):
             st.markdown("""
