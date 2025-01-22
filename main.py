@@ -39,34 +39,16 @@ def main():
         .usage-info ul {
             margin-left: 20px;
         }
-        /* Refined spacing control */
         .block-container {
-            padding: 1rem 1rem 0 1rem !important;
+            padding: 1rem !important;
         }
+        /* Minimal spacing controls */
         div[data-testid="stExpander"] {
-            padding: 0 !important;
-            border: none !important;
-        }
-        div[data-testid="stExpander"] > div {
+            margin: 0 !important;
             padding: 0 !important;
         }
-        div[data-testid="stForm"] {
+        .streamlit-expanderContent {
             padding: 0 !important;
-        }
-        div[data-testid="column"] {
-            padding: 0 !important;
-        }
-        .stTextInput > div {
-            padding-top: 0.5rem !important;
-        }
-        .stCheckbox {
-            padding-top: 0.5rem !important;
-        }
-        section[data-testid="stSidebar"] {
-            padding-top: 0 !important;
-        }
-        div[data-testid="stVerticalBlock"] > div:first-child {
-            padding-top: 0 !important;
         }
         </style>
     """, unsafe_allow_html=True)
@@ -74,56 +56,50 @@ def main():
     st.title("CSV Format Converter")
     st.write("Convert raw questions CSV to structured goal format")
 
-    # Container for better spacing control
-    form_container = st.container()
-    with form_container:
-        # Format requirements expander
-        with st.expander("ℹ️ Input Format Requirements", expanded=True):
-            st.markdown("""
-            <div class="usage-info">
-            <h4>Required CSV Columns:</h4>
-            <ul>
-            <li>Question</li>
-            <li>answer choice A</li>
-            <li>answer choice B</li>
-            <li>answer choice C</li>
-            <li>answer choice D</li>
-            <li>Correct Answer</li>
-            </ul>
 
-            <h4>Important Notes:</h4>
-            <ul>
-            <li>Make sure your CSV file contains all required columns</li>
-            <li>Column names should match exactly (case-sensitive)</li>
-            <li>All fields should be filled out</li>
-            <li>The correct answer must match one of the choices exactly</li>
-            </ul>
-            </div>
-            """, unsafe_allow_html=True)
+    # Direct component placement without containers
+    st.markdown("""
+        <div class="usage-info">
+        <h4>Required CSV Columns:</h4>
+        <ul>
+        <li>Question</li>
+        <li>answer choice A</li>
+        <li>answer choice B</li>
+        <li>answer choice C</li>
+        <li>answer choice D</li>
+        <li>Correct Answer</li>
+        </ul>
 
-        # Category input
-        category = st.text_input(
-            "Category",
-            help="Enter the category to be used in the converted files",
-            placeholder="Enter category (required)",
-        )
+        <h4>Important Notes:</h4>
+        <ul>
+        <li>Make sure your CSV file contains all required columns</li>
+        <li>Column names should match exactly (case-sensitive)</li>
+        <li>All fields should be filled out</li>
+        <li>The correct answer must match one of the choices exactly</li>
+        </ul>
+        </div>
+    """, unsafe_allow_html=True)
 
-        # Blank IDs checkbox
-        blank_ids = st.checkbox(
-            "Export with blank IDs",
-            help="Check this to export files with blank ID column values (header will be kept)",
-            value=False
-        )
+    category = st.text_input(
+        "Category",
+        help="Enter the category to be used in the converted files",
+        placeholder="Enter category (required)",
+    )
 
-        # File uploader
-        st.markdown('<div class="uploadedFile">', unsafe_allow_html=True)
-        uploaded_files = st.file_uploader(
-            "Upload raw questions CSV files",
-            type=['csv'],
-            accept_multiple_files=True,
-            help="Upload one or more CSV files containing questions and answers in the raw format"
-        )
-        st.markdown('</div>', unsafe_allow_html=True)
+    blank_ids = st.checkbox(
+        "Export with blank IDs",
+        help="Check this to export files with blank ID column values (header will be kept)",
+        value=False
+    )
+
+    st.markdown('<div class="uploadedFile">', unsafe_allow_html=True)
+    uploaded_files = st.file_uploader(
+        "Upload raw questions CSV files",
+        type=['csv'],
+        accept_multiple_files=True,
+        help="Upload one or more CSV files containing questions and answers in the raw format"
+    )
+    st.markdown('</div>', unsafe_allow_html=True)
 
     if uploaded_files:
         st.info(f"📁 {len(uploaded_files)} file(s) uploaded")
