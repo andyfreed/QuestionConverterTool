@@ -25,23 +25,39 @@ def main():
         .stApp {
             background-color: transparent;
         }
+        .usage-info {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
         </style>
     """, unsafe_allow_html=True)
 
     st.title("CSV Format Converter")
     st.write("Convert raw questions CSV to structured goal format")
 
-    # Add helper information
-    with st.expander("ℹ️ Input Format Requirements"):
-        st.write("""
-        Your CSV files should contain the following columns:
+    # Add helper information with enhanced styling
+    with st.expander("ℹ️ Input Format Requirements", expanded=True):
+        st.markdown("""
+        <div class="usage-info">
+        <h4>Required CSV Columns:</h4>
+
         - Question
         - answer choice A
         - answer choice B
         - answer choice C
         - answer choice D
         - Correct Answer
-        """)
+
+        <h4>Important Notes:</h4>
+
+        - Make sure your CSV file contains all required columns
+        - Column names should match exactly (case-sensitive)
+        - All fields should be filled out
+        - The correct answer must match one of the choices exactly
+        </div>
+        """, unsafe_allow_html=True)
 
     # File uploader with multiple files support and enhanced visibility
     st.markdown('<div class="uploadedFile">', unsafe_allow_html=True)
