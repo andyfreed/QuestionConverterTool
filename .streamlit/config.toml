@@ -1,13 +1,18 @@
 [server]
 headless = true
 address = "0.0.0.0"
-port = 5000
+port = 8000
 enableCORS = false
 enableXsrfProtection = true
 sslCertFile = ''
 sslKeyFile = ''
+maxUploadSize = 200
+enableWebsocketCompression = true
 
 [browser]
 serverAddress = "0.0.0.0"
 serverPort = 8000
 gatherUsageStats = false
+
+[theme]
+base = "dark"
