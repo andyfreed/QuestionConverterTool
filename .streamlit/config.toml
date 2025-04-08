@@ -2,9 +2,12 @@
 headless = true
 address = "0.0.0.0"
 port = 5000
-enableCORS = true
-enableXsrfProtection = false
+enableCORS = false
+enableXsrfProtection = true
+sslCertFile = ''
+sslKeyFile = ''
 
 [browser]
 serverAddress = "0.0.0.0"
+serverPort = 8000
 gatherUsageStats = false
