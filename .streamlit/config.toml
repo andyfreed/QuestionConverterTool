@@ -8,6 +8,8 @@ sslCertFile = ''
 sslKeyFile = ''
 maxUploadSize = 200
 enableWebsocketCompression = true
+runOnSave = true
+allowRunOnSave = true
 
 [browser]
 serverAddress = "0.0.0.0"
@@ -16,3 +18,7 @@ gatherUsageStats = false
 
 [theme]
 base = "dark"
+
+[client]
+showErrorDetails = true
+toolbarMode = "auto"
