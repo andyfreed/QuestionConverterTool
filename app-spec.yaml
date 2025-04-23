@@ -1,0 +1,17 @@
+name: question-converter-tool
+region: nyc
+services:
+  - name: streamlit-app
+    github:
+      repo: andyfreed/QuestionConverterTool
+      branch: main
+    build_command: pip install -r requirements.txt
+    run_command: streamlit run main.py --server.port=$PORT --server.address=0.0.0.0
+    envs:
+      - key: PYTHONUNBUFFERED
+        value: "1"
+    http_port: 8501
+    instance_count: 1
+    instance_size_slug: basic-xxs
+    routes:
+      - path: / 

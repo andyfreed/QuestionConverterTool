@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  streamlit-app:
+    build: .
+    ports:
+      - "8501:8501"
+    restart: always
+    volumes:
+      - ./attached_assets:/app/attached_assets 
