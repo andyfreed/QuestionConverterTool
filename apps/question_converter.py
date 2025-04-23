@@ -6,12 +6,6 @@ import zipfile
 import base64
 
 def main():
-    st.set_page_config(
-        page_title="Convert Exam to Import File",
-        layout="wide",
-        initial_sidebar_state="collapsed"
-    )
-
     # Base styling
     st.markdown("""
         <style>
